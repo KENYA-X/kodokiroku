@@ -1,7 +1,7 @@
 // ---- タイマー ----
 let timerInterval = null;
-let elapsedSeconds = 0;
-let startTimestamp = null;
+let timerStartedAt = null;  // Date.now() at start
+let pausedElapsed = 0;      // ms already elapsed before current run
 
 function pad(n) { return String(n).padStart(2, '0'); }
 
@@ -22,27 +22,60 @@ function todayString() {
   return `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}`;
 }
 
+function getElapsedSeconds() {
+  if (timerStartedAt === null) return Math.floor(pausedElapsed / 1000);
+  return Math.floor((pausedElapsed + Date.now() - timerStartedAt) / 1000);
+}
+
+function updateDisplay() {
+  const s = getElapsedSeconds();
+  document.getElementById('timerDisplay').textContent = secondsToHMS(s);
+  document.getElementById('inputElapsed').value = secondsToHMS(s);
+}
+
+const TIMER_KEY = 'kodokiroku_timer';
+
+function saveTimerState() {
+  localStorage.setItem(TIMER_KEY, JSON.stringify({
+    timerStartedAt,
+    pausedElapsed,
+    inputStart: document.getElementById('inputStart').value,
+    inputDate:  document.getElementById('inputDate').value,
+  }));
+}
+
+function clearTimerState() {
+  localStorage.removeItem(TIMER_KEY);
+}
+
 function startTimer() {
   if (timerInterval) return;
-  startTimestamp = new Date();
+  timerStartedAt = Date.now();
   if (!document.getElementById('inputStart').value) {
     document.getElementById('inputStart').value = nowTimeString();
   }
   if (!document.getElementById('inputDate').value) {
     document.getElementById('inputDate').value = todayString();
   }
-  timerInterval = setInterval(() => {
-    elapsedSeconds++;
-    document.getElementById('timerDisplay').textContent = secondsToHMS(elapsedSeconds);
-    document.getElementById('inputElapsed').value = secondsToHMS(elapsedSeconds);
-  }, 1000);
+  saveTimerState();
+  timerInterval = setInterval(updateDisplay, 500);
+  document.addEventListener('visibilitychange', onVisibilityChange);
   document.getElementById('btnStart').disabled = true;
   document.getElementById('btnStop').disabled = false;
 }
 
+function onVisibilityChange() {
+  if (!document.hidden && timerStartedAt !== null) updateDisplay();
+}
+
 function stopTimer() {
+  pausedElapsed += Date.now() - timerStartedAt;
+  timerStartedAt = null;
   clearInterval(timerInterval);
   timerInterval = null;
+  document.removeEventListener('visibilitychange', onVisibilityChange);
+  clearTimerState();
+  updateDisplay();
   document.getElementById('inputEnd').value = nowTimeString();
   document.getElementById('btnStart').disabled = false;
   document.getElementById('btnStop').disabled = true;
@@ -51,13 +84,31 @@ function stopTimer() {
 function resetTimer() {
   clearInterval(timerInterval);
   timerInterval = null;
-  elapsedSeconds = 0;
+  timerStartedAt = null;
+  pausedElapsed = 0;
+  document.removeEventListener('visibilitychange', onVisibilityChange);
+  clearTimerState();
   document.getElementById('timerDisplay').textContent = '00:00:00';
   document.getElementById('inputElapsed').value = '';
   document.getElementById('inputStart').value = '';
   document.getElementById('inputEnd').value = '';
   document.getElementById('btnStart').disabled = false;
   document.getElementById('btnStop').disabled = true;
+}
+
+function restoreTimer() {
+  const saved = localStorage.getItem(TIMER_KEY);
+  if (!saved) return;
+  const state = JSON.parse(saved);
+  pausedElapsed  = state.pausedElapsed;
+  timerStartedAt = state.timerStartedAt;
+  document.getElementById('inputStart').value = state.inputStart;
+  document.getElementById('inputDate').value  = state.inputDate;
+  updateDisplay();
+  timerInterval = setInterval(updateDisplay, 500);
+  document.addEventListener('visibilitychange', onVisibilityChange);
+  document.getElementById('btnStart').disabled = true;
+  document.getElementById('btnStop').disabled = false;
 }
 
 // ---- ローカルストレージ ----
@@ -166,3 +217,4 @@ function exportCSV() {
 // ---- 初期化 ----
 document.getElementById('inputDate').value = todayString();
 renderList();
+restoreTimer();
