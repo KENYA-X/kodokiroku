@@ -1,0 +1,157 @@
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: 'Segoe UI', sans-serif;
+  background: #f0f2f5;
+  color: #333;
+  padding: 24px;
+}
+
+h1 {
+  font-size: 1.4rem;
+  margin-bottom: 20px;
+  color: #444;
+}
+
+.card {
+  background: #fff;
+  border-radius: 10px;
+  padding: 20px 24px;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.1);
+  margin-bottom: 20px;
+}
+
+/* タイマー */
+.timer-section {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.timer-display {
+  font-size: 2.4rem;
+  font-weight: bold;
+  font-variant-numeric: tabular-nums;
+  color: #2563eb;
+  min-width: 120px;
+}
+
+.timer-buttons {
+  display: flex;
+  gap: 8px;
+}
+
+/* 入力フォーム */
+.form-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  align-items: flex-end;
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.field label {
+  font-size: 0.75rem;
+  color: #666;
+}
+
+.field input,
+.field select {
+  height: 36px;
+  padding: 0 10px;
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+  font-size: 0.9rem;
+  background: #fafafa;
+}
+
+.field input:focus,
+.field select:focus {
+  outline: none;
+  border-color: #2563eb;
+  background: #fff;
+}
+
+.field-name select   { width: 180px; }
+.field-date input    { width: 140px; }
+.field-time input    { width: 110px; }
+.field-elapsed input { width: 110px; background: #f0f4ff !important; }
+
+/* ボタン共通 */
+button {
+  height: 36px;
+  padding: 0 16px;
+  border: none;
+  border-radius: 6px;
+  font-size: 0.85rem;
+  cursor: pointer;
+  transition: opacity 0.15s;
+}
+
+button:hover  { opacity: 0.85; }
+button:active { opacity: 0.7; }
+
+.btn-start  { background: #22c55e; color: #fff; }
+.btn-stop   { background: #ef4444; color: #fff; }
+.btn-reset  { background: #6b7280; color: #fff; }
+.btn-save   { background: #2563eb; color: #fff; }
+.btn-csv    { background: #f59e0b; color: #fff; }
+.btn-delete { background: #fee2e2; color: #dc2626; font-size: 0.78rem; height: 28px; padding: 0 10px; }
+
+/* リスト */
+.list-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.list-header h2 { font-size: 1rem; color: #444; }
+
+.date-group { margin-bottom: 16px; }
+
+.date-label {
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: #2563eb;
+  padding: 4px 0 6px;
+  border-bottom: 2px solid #2563eb;
+  margin-bottom: 4px;
+}
+
+.date-group table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.85rem;
+}
+
+.date-group th {
+  text-align: left;
+  padding: 6px 10px;
+  color: #555;
+  font-weight: 600;
+  border-bottom: 1px solid #e5e7eb;
+  background: #f8fafc;
+}
+
+.date-group td {
+  padding: 8px 10px;
+  border-bottom: 1px solid #f0f0f0;
+  vertical-align: middle;
+}
+
+.date-group tr:last-child td { border-bottom: none; }
+.date-group tr:hover td      { background: #f9fafb; }
+
+.empty-msg {
+  text-align: center;
+  color: #aaa;
+  padding: 32px 0;
+  font-size: 0.9rem;
+}

@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>行動記録</title>
+  <link rel="stylesheet" href="kodokiroku.css">
+</head>
+<body>
+
+<h1>行動記録</h1>
+
+<!-- タイマー -->
+<div class="card">
+  <div class="timer-section">
+    <div class="timer-display" id="timerDisplay">00:00:00</div>
+    <div class="timer-buttons">
+      <button class="btn-start" id="btnStart" onclick="startTimer()">スタート</button>
+      <button class="btn-stop"  id="btnStop"  onclick="stopTimer()" disabled>ストップ</button>
+      <button class="btn-reset"               onclick="resetTimer()">リセット</button>
+    </div>
+  </div>
+</div>
+
+<!-- 入力フォーム -->
+<div class="card">
+  <div class="form-row">
+    <div class="field field-date">
+      <label>日付</label>
+      <input type="date" id="inputDate">
+    </div>
+    <div class="field field-name">
+      <label>名称</label>
+      <select id="inputName">
+        <option value="">-- 選択 --</option>
+        <option value="朝食">朝食</option>
+        <option value="歯磨き">歯磨き</option>
+        <option value="着替え">着替え</option>
+        <option value="家→駅">家→駅</option>
+        <option value="駅→家">駅→家</option>
+        <option value="風呂">風呂</option>
+        <option value="夕食">夕食</option>
+      </select>
+    </div>
+    <div class="field field-time">
+      <label>開始時刻</label>
+      <input type="time" id="inputStart">
+    </div>
+    <div class="field field-time">
+      <label>終了時刻</label>
+      <input type="time" id="inputEnd">
+    </div>
+    <div class="field field-elapsed">
+      <label>経過時間</label>
+      <input type="text" id="inputElapsed" placeholder="00:00:00" readonly>
+    </div>
+    <button class="btn-save" onclick="saveRecord()">保存</button>
+  </div>
+</div>
+
+<!-- 保存リスト -->
+<div class="card">
+  <div class="list-header">
+    <h2>保存リスト</h2>
+    <button class="btn-csv" onclick="exportCSV()">CSVエクスポート</button>
+  </div>
+  <div id="recordBody"></div>
+  <div class="empty-msg" id="emptyMsg">まだ記録がありません</div>
+</div>
+
+<script src="kodokiroku.js"></script>
+</body>
+</html>
